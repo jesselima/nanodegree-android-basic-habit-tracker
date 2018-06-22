@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Habit Tracker</string>
+    <string name="start_date">Start Date</string>
+    <string name="name">Name</string>
+</resources>
