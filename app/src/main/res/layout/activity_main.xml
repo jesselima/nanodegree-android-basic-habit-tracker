@@ -3,11 +3,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="16dp"
+    android:layout_margin="4dp"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!-- ACTIONS BUTTONS -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            android:id="@+id/btn_insert_dummy_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dummy_data"/>
+        <Button
+            android:id="@+id/btn_delete_data_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_database"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+        <EditText
+            android:id="@+id/edt_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name"
+            android:inputType="text"/>
+        <EditText
+            android:id="@+id/edt_start_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:hint="@string/start_date"
+            android:inputType="date"/>
+        <EditText
+            android:id="@+id/edt_priority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/priority"
+            android:inputType="number"/>
+        <EditText
+            android:id="@+id/edt_frequency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/frequency"
+            android:inputType="number"/>
+        <EditText
+            android:id="@+id/edt_target"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/target"
+            android:inputType="number"/>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,61 +71,12 @@
             android:id="@+id/btn_save_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="INSERT"/>
-
+            android:text="@string/add_new_habit"/>
         <Button
             android:id="@+id/btn_read_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="READ"/>
+            android:text="@string/read_habits"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <EditText
-            android:id="@+id/edt_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/name"
-            android:inputType="text"/>
-
-        <EditText
-            android:id="@+id/edt_start_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:hint="@string/start_date"
-            android:inputType="date"/>
-
-        <EditText
-            android:id="@+id/edt_priority"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Priority"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/edt_frequency"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Frequency"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/edt_target"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Target"
-            android:inputType="number"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/text_view_habits"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"/>
 </LinearLayout>

@@ -1,5 +1,54 @@
 <resources>
+
     <string name="app_name">Habit Tracker</string>
     <string name="start_date">Start Date</string>
     <string name="name">Name</string>
+    <string name="dummy_data">INSERT DUMMY DATA</string>
+    <string name="delete_database">DELETE DATABASE</string>
+    <string name="priority">Priority (from 1 to 5)</string>
+    <string name="frequency">Frequency (0 for Daily, 1 for Weekly, 2 for Monthly)</string>
+    <string name="target">Target (any number you\'re targeting)</string>
+    <string name="add_new_habit">ADD NEW HABIT</string>
+    <string name="read_habits">READ HABITS</string>
+
+    <string-array name="dummy_habit_names">
+        <item>Drink Watter</item>
+        <item>Run 1h</item>
+        <item>Read a Book</item>
+        <item>Watch Movies</item>
+        <item>Take medicine</item>
+    </string-array>
+
+    <string-array name="dummy_habit_start_date">
+        <item>2018&#8211;05&#8211;26</item>
+        <item>2018&#8211;06&#8211;22</item>
+        <item>2018&#8211;06&#8211;18</item>
+        <item>2018&#8211;05&#8211;30</item>
+        <item>2018&#8211;06&#8211;01</item>
+    </string-array>
+
+    <integer-array name="dummy_habit_frequency">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>1</item>
+        <item>0</item>
+    </integer-array>
+
+    <integer-array name="dummy_habit_target">
+        <item>3</item>
+        <item>3</item>
+        <item>1</item>
+        <item>1</item>
+        <item>3</item>
+    </integer-array>
+
+    <integer-array name="dummy_habit_priorities">
+        <item>3</item>
+        <item>2</item>
+        <item>4</item>
+        <item>1</item>
+        <item>5</item>
+    </integer-array>
+
 </resources>

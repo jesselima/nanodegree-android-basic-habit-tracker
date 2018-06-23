@@ -1,6 +1,7 @@
 package com.udacity.habittracker;
 
 import android.content.ContentValues;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,11 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.udacity.habittracker.data.Habit;
 import com.udacity.habittracker.data.HabitContract;
 import com.udacity.habittracker.data.HabitContract.HabitEntry;
 import com.udacity.habittracker.data.HabitDbHelper;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         btnInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insertPet();
+                insertHabit();
             }
         });
 
@@ -58,36 +62,95 @@ public class MainActivity extends AppCompatActivity {
         btnRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                read();
+                readHabits();
+            }
+        });
+
+        Button btnDummyData = findViewById(R.id.btn_insert_dummy_data);
+        btnDummyData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                insertDummyData();
+            }
+        });
+
+
+        Button btnDeleteDataBase = findViewById(R.id.btn_delete_data_base);
+        btnDeleteDataBase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteDatabase("habit_tracker.db");
             }
         });
     }
 
+    /* Get data from resources and add to the data base as a dummy data */
+    private void insertDummyData() {
 
+        SQLiteDatabase db = mHabitDbHelper.getWritableDatabase();
 
-    private void insertPet() {
+        Resources resources = getResources();
 
+        String[] habitsArraySize = resources.getStringArray(R.array.dummy_habit_names);
+        String[] habitNames = resources.getStringArray(R.array.dummy_habit_names);
+        String[] habitStartDates = resources.getStringArray(R.array.dummy_habit_start_date);
+        int[] habitFrequency = resources.getIntArray(R.array.dummy_habit_frequency);
+        int[] habitTarget = resources.getIntArray(R.array.dummy_habit_target);
+        int[] habitPriority = resources.getIntArray(R.array.dummy_habit_priorities);
+
+        ContentValues values = new ContentValues();
+
+        for(int i = 0; i < habitsArraySize.length; i++){
+
+            Habit habit = new Habit();
+
+            habit.setmHabitName(habitNames[i]);
+            habit.setmHabitStartDate(habitStartDates[i]);
+            habit.setmHabitFrequency(habitFrequency[i]);
+            habit.setmHabitTarget(habitTarget[i]);
+            habit.setmHabitPriority(habitPriority[i]);
+
+            values.put(HabitEntry.COLUMN_HABIT_NAME, habit.getmHabitName());
+            values.put(HabitEntry.COLUMN_HABIT_START_DATE, habit.getmHabitStartDate());
+            values.put(HabitEntry.COLUMN_HABIT_FREQUENCY, habit.getmHabitFrequency());
+            values.put(HabitEntry.COLUMN_HABIT_TARGET, habit.getmHabitTarget());
+            values.put(HabitEntry.COLUMN_HABIT_PRIORITY, habit.getmHabitPriority());
+
+            // Insert a new row for the habit table in the database, returning the ID of that new row.
+            long newRowId = db.insert(HabitContract.HabitEntry.TABLE_NAME, null, values);
+            // Show a toast message depending on whether or not the insertion was successful
+            if (newRowId == -1) {
+                // If the row ID is -1, then there was an error with insertion.
+                Toast.makeText(this, "Error with saving habit", Toast.LENGTH_SHORT).show();
+            } else {
+                // LOG DATA FOR TESTING PURPOSE ONLY
+                Log.v(">>>>>> INSERTED", " ===== New Row ID:" + newRowId + " - " +
+                    String.valueOf(habit.getmHabitName()) + " - " +
+                            String.valueOf(habit.getmHabitStartDate()) + " - " +
+                            String.valueOf(habit.getmHabitFrequency()) + " - " +
+                            String.valueOf(habit.getmHabitTarget()) + " - " +
+                            String.valueOf(habit.getmHabitPriority()));
+            }
+        }
+        Log.v(">>>>>>", "===== DUMMY DATA INSERT DONE! NOW CLICK 'READ' BUTTON ======");
+        Toast.makeText(this, "Dummy Data inserted. Now click 'READ' button. ", Toast.LENGTH_SHORT).show();
+
+    }// CLOSE insertDummyData
+
+    /**
+     * Insert data from the form into tha database.
+     */
+    private void insertHabit() {
+
+        /* Get data from user inputs in the form */
         String name = mEditTextName.getText().toString().trim();
-
         String startDate = currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
-
         String frequencyString = mEditTextFrequency.getText().toString().trim();
-        int frequency = Integer.parseInt(frequencyString);
-
+            int frequency = Integer.parseInt(frequencyString);
         String targetString = mEditTextTarget.getText().toString().trim();
-        int target = Integer.parseInt(targetString);
-
+            int target = Integer.parseInt(targetString);
         String priorityString = mEditTextPriority.getText().toString().trim();
-        int priority = Integer.parseInt(priorityString);
-
-        /**
-         * String name = "Drink water";
-         * String startDate = "2018-06-22";
-         * int frequency = 1; // 0 for DAILY, 1 for WEEKDLY and 2 MONTHLY
-         * int target = 3; // from 1 to 5. Where 5 is the highest priority
-         * int priority = 1; // from 1 to 5. Where 5 is the highest priority
-         *
-        */
+            int priority = Integer.parseInt(priorityString);
 
         SQLiteDatabase db = mHabitDbHelper.getWritableDatabase();
 
@@ -104,16 +167,16 @@ public class MainActivity extends AppCompatActivity {
         if (newRowId == -1) {
             // If the row ID is -1, then there was an error with insertion.
             Toast.makeText(this, "Error with saving habit", Toast.LENGTH_SHORT).show();
+            Log.v("ERROR", "Error with saving habit");
         } else {
             // Otherwise, the insertion was successful and we can display a toast with the row ID.
             Toast.makeText(this, "Row id of the saved habit: " + newRowId, Toast.LENGTH_SHORT).show();
+            Log.v("HABIT SAVED", "Row id of the saved habit: " + newRowId);
         }
     }// CLOSE INSERT
 
 
-
-
-    private void read(){
+    private void readHabits(){
 
         // Create and/or open a database to read from it
         SQLiteDatabase db = mHabitDbHelper.getReadableDatabase();
@@ -137,19 +200,9 @@ public class MainActivity extends AppCompatActivity {
                 null,      // The values for the WHERE clause
                 null,          // Don't group the rows
                 null,           // Don't filter by row groups
-                HabitEntry.COLUMN_HABIT_PRIORITY);         // The sort order
-
-        TextView displayView = findViewById(R.id.text_view_habits);
+                HabitEntry._ID);         // The sort order
 
         try {
-           
-            displayView.append(HabitEntry._ID + " - " +
-                    HabitEntry.COLUMN_HABIT_NAME + " - " +
-                    HabitEntry.COLUMN_HABIT_START_DATE + " - " +
-                    HabitEntry.COLUMN_HABIT_FREQUENCY + " - " +
-                    HabitEntry.COLUMN_HABIT_TARGET + " - " +
-                    HabitEntry.COLUMN_HABIT_PRIORITY + "\n");
-
             // Figure out the index of each column
             int idColumnIndex = cursor.getColumnIndex(HabitEntry._ID);
             int nameColumnIndex = cursor.getColumnIndex(HabitEntry.COLUMN_HABIT_NAME);
@@ -168,27 +221,20 @@ public class MainActivity extends AppCompatActivity {
                 int currentTarget = cursor.getInt(targetColumnIndex);
                 int currentPriority = cursor.getInt(priorityColumnIndex);
 
-                // Display the values from each column of the current row in the cursor in the TextView
-                displayView.append(("\n" +
-                        currentID + " - " +
-                        currentName + " - " +
-                        currentStartDate + " - " +
-                        currentFrequency + " - " +
-                        currentTarget + " - " +
-                        currentPriority));
-
-                // TESTING
-                Log.v("=====================", "=====================");
+                // LOG DATA FOR TESTING PURPOSE ONLY
                 Log.v(">>>>>> ID", String.valueOf(currentID));
                 Log.v(">>>>>> Name", String.valueOf(currentName));
                 Log.v(">>>>>> Start Date", String.valueOf(currentStartDate));
                 Log.v(">>>>>> Frequency", String.valueOf(currentFrequency));
-                Log.v(">>> Target In Frequency", String.valueOf(currentTarget));
+                Log.v(">>>>>> Target", String.valueOf(currentTarget));
                 Log.v(">>>>>> Priority", String.valueOf(currentPriority));
+                Log.v("=============", "================");
+
             }
         } finally {
             cursor.close();
-        }
-        Log.v("===================== ", "=====================");
+            Toast.makeText(this, "See Logcat results", Toast.LENGTH_LONG).show();
         }
     }
+
+} // CLOSE MainActivity
