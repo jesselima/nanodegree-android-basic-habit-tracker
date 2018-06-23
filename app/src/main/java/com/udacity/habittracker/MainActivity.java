@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.udacity.habittracker.data.Habit;
@@ -18,9 +17,7 @@ import com.udacity.habittracker.data.HabitContract;
 import com.udacity.habittracker.data.HabitContract.HabitEntry;
 import com.udacity.habittracker.data.HabitDbHelper;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -74,12 +71,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         Button btnDeleteDataBase = findViewById(R.id.btn_delete_data_base);
         btnDeleteDataBase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteDatabase("habit_tracker.db");
+                deleteDatabase(HabitDbHelper.DATABASE_NAME);
             }
         });
     }
@@ -100,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         ContentValues values = new ContentValues();
 
-        for(int i = 0; i < habitsArraySize.length; i++){
+        for (int i = 0; i < habitsArraySize.length; i++) {
 
             Habit habit = new Habit();
 
@@ -121,19 +117,19 @@ public class MainActivity extends AppCompatActivity {
             // Show a toast message depending on whether or not the insertion was successful
             if (newRowId == -1) {
                 // If the row ID is -1, then there was an error with insertion.
-                Toast.makeText(this, "Error with saving habit", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_saving_habit, Toast.LENGTH_SHORT).show();
             } else {
                 // LOG DATA FOR TESTING PURPOSE ONLY
                 Log.v(">>>>>> INSERTED", " ===== New Row ID:" + newRowId + " - " +
-                    String.valueOf(habit.getmHabitName()) + " - " +
-                            String.valueOf(habit.getmHabitStartDate()) + " - " +
-                            String.valueOf(habit.getmHabitFrequency()) + " - " +
-                            String.valueOf(habit.getmHabitTarget()) + " - " +
-                            String.valueOf(habit.getmHabitPriority()));
+                        String.valueOf(habit.getmHabitName()) + " - " +
+                        String.valueOf(habit.getmHabitStartDate()) + " - " +
+                        String.valueOf(habit.getmHabitFrequency()) + " - " +
+                        String.valueOf(habit.getmHabitTarget()) + " - " +
+                        String.valueOf(habit.getmHabitPriority()));
             }
         }
-        Log.v(">>>>>>", "===== DUMMY DATA INSERT DONE! NOW CLICK 'READ' BUTTON ======");
-        Toast.makeText(this, "Dummy Data inserted. Now click 'READ' button. ", Toast.LENGTH_SHORT).show();
+        Log.v(">>>>>>", "===== DUMMY DATA INSERT DONE! NOW CLICK 'READ HABITS' BUTTON ======");
+        Toast.makeText(this, R.string.dummy_data_inserted, Toast.LENGTH_SHORT).show();
 
     }// CLOSE insertDummyData
 
@@ -146,11 +142,11 @@ public class MainActivity extends AppCompatActivity {
         String name = mEditTextName.getText().toString().trim();
         String startDate = currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
         String frequencyString = mEditTextFrequency.getText().toString().trim();
-            int frequency = Integer.parseInt(frequencyString);
+        int frequency = Integer.parseInt(frequencyString);
         String targetString = mEditTextTarget.getText().toString().trim();
-            int target = Integer.parseInt(targetString);
+        int target = Integer.parseInt(targetString);
         String priorityString = mEditTextPriority.getText().toString().trim();
-            int priority = Integer.parseInt(priorityString);
+        int priority = Integer.parseInt(priorityString);
 
         SQLiteDatabase db = mHabitDbHelper.getWritableDatabase();
 
@@ -166,17 +162,17 @@ public class MainActivity extends AppCompatActivity {
         // Show a toast message depending on whether or not the insertion was successful
         if (newRowId == -1) {
             // If the row ID is -1, then there was an error with insertion.
-            Toast.makeText(this, "Error with saving habit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error_saving_habit, Toast.LENGTH_SHORT).show();
             Log.v("ERROR", "Error with saving habit");
         } else {
             // Otherwise, the insertion was successful and we can display a toast with the row ID.
-            Toast.makeText(this, "Row id of the saved habit: " + newRowId, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.orw_if_of_saved_habit) + newRowId, Toast.LENGTH_SHORT).show();
             Log.v("HABIT SAVED", "Row id of the saved habit: " + newRowId);
         }
     }// CLOSE INSERT
 
 
-    private void readHabits(){
+    private void readHabits() {
 
         // Create and/or open a database to read from it
         SQLiteDatabase db = mHabitDbHelper.getReadableDatabase();
@@ -201,6 +197,11 @@ public class MainActivity extends AppCompatActivity {
                 null,          // Don't group the rows
                 null,           // Don't filter by row groups
                 HabitEntry._ID);         // The sort order
+
+        if (cursor.getCount() < 1){
+            Toast.makeText(this, R.string.no_data_in_database, Toast.LENGTH_LONG).show();
+            return;
+        }
 
         try {
             // Figure out the index of each column
@@ -233,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } finally {
             cursor.close();
-            Toast.makeText(this, "See Logcat results", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.see_logcat_for_results, Toast.LENGTH_LONG).show();
         }
     }
 

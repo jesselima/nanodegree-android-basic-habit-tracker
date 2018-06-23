@@ -10,18 +10,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/btn_insert_dummy_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/dummy_data"/>
+            android:text="@string/insert_dummy_data" />
+
         <Button
             android:id="@+id/btn_delete_data_base"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/delete_database"/>
+            android:text="@string/delete_database" />
     </LinearLayout>
 
     <LinearLayout
@@ -29,54 +31,61 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="visible">
+
         <EditText
             android:id="@+id/edt_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/name"
-            android:inputType="text"/>
+            android:inputType="text" />
+
         <EditText
             android:id="@+id/edt_start_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:hint="@string/start_date"
-            android:inputType="date"/>
+            android:inputType="date"
+            android:visibility="gone" />
+
         <EditText
             android:id="@+id/edt_priority"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/priority"
-            android:inputType="number"/>
+            android:inputType="number" />
+
         <EditText
             android:id="@+id/edt_frequency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/frequency"
-            android:inputType="number"/>
+            android:inputType="number" />
+
         <EditText
             android:id="@+id/edt_target"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/target"
-            android:inputType="number"/>
+            android:inputType="number" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/btn_save_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_new_habit"/>
+            android:text="@string/add_new_habit" />
+
         <Button
             android:id="@+id/btn_read_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/read_habits"/>
+            android:text="@string/read_habits" />
     </LinearLayout>
 
 </LinearLayout>
