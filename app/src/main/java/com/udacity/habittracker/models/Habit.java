@@ -1,4 +1,4 @@
-package com.udacity.habittracker.data;
+package com.udacity.habittracker.models;
 
 
 public class Habit {

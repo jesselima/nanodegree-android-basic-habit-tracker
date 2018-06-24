@@ -1,4 +1,4 @@
-package com.udacity.habittracker.data;
+package com.udacity.habittracker.contracts;
 
 import android.provider.BaseColumns;
 
@@ -13,7 +13,7 @@ public final class HabitContract {
         /* The name of the table. */
         public final static String TABLE_NAME = "habit";
 
-        // It's the id of the habit. It's auto generated id by the data base.
+        // It's the id of the habit. It's auto generated id by the contracts base.
         public final static String _ID = BaseColumns._ID;
 
         // It's the name of the habit to be tracked.

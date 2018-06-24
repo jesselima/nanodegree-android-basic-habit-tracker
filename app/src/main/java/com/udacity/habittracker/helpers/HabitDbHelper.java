@@ -1,8 +1,10 @@
-package com.udacity.habittracker.data;
+package com.udacity.habittracker.helpers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.udacity.habittracker.contracts.HabitContract;
 
 
 public class HabitDbHelper extends SQLiteOpenHelper {
@@ -33,5 +35,6 @@ public class HabitDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
     }
 }

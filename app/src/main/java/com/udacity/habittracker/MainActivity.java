@@ -12,10 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.udacity.habittracker.data.Habit;
-import com.udacity.habittracker.data.HabitContract;
-import com.udacity.habittracker.data.HabitContract.HabitEntry;
-import com.udacity.habittracker.data.HabitDbHelper;
+import com.udacity.habittracker.models.Habit;
+import com.udacity.habittracker.contracts.HabitContract;
+import com.udacity.habittracker.contracts.HabitContract.HabitEntry;
+import com.udacity.habittracker.helpers.HabitDbHelper;
+import com.udacity.habittracker.utils.HabitDbUtils;
 
 import java.util.Calendar;
 
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /* Get data from resources and add to the data base as a dummy data */
+    /* Get contracts from resources and add to the contracts base as a dummy contracts */
     private void insertDummyData() {
 
         SQLiteDatabase db = mHabitDbHelper.getWritableDatabase();
@@ -134,11 +135,11 @@ public class MainActivity extends AppCompatActivity {
     }// CLOSE insertDummyData
 
     /**
-     * Insert data from the form into tha database.
+     * Insert contracts from the form into tha database.
      */
     private void insertHabit() {
 
-        /* Get data from user inputs in the form */
+        /* Get contracts from user inputs in the form */
         String name = mEditTextName.getText().toString().trim();
         String startDate = currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
         String frequencyString = mEditTextFrequency.getText().toString().trim();
@@ -174,30 +175,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void readHabits() {
 
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mHabitDbHelper.getReadableDatabase();
+        /*
+         * The method "read()" from the class  HabitDbUtils returns a Cursor object.
+         * Access the database and read the data using the query() method.
+         */
+        Cursor cursor = HabitDbUtils.read(this);
 
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                HabitEntry._ID,
-                HabitEntry.COLUMN_HABIT_NAME,
-                HabitEntry.COLUMN_HABIT_START_DATE,
-                HabitEntry.COLUMN_HABIT_FREQUENCY,
-                HabitEntry.COLUMN_HABIT_TARGET,
-                HabitEntry.COLUMN_HABIT_PRIORITY
-        };
-
-        // Perform a query on the habit table
-        Cursor cursor = db.query(
-                HabitEntry.TABLE_NAME, // The table to query
-                projection,            // The columns to return
-                null,         // The columns for the WHERE clause
-                null,      // The values for the WHERE clause
-                null,          // Don't group the rows
-                null,           // Don't filter by row groups
-                HabitEntry._ID);         // The sort order
-
+        /* Verifies if there is at least 1 result from database. If there is no data returned */
         if (cursor.getCount() < 1){
             Toast.makeText(this, R.string.no_data_in_database, Toast.LENGTH_LONG).show();
             return;
