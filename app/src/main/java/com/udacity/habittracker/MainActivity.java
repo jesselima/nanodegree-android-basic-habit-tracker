@@ -81,58 +81,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /* Get contracts from resources and add to the contracts base as a dummy contracts */
-    private void insertDummyData() {
-
-        SQLiteDatabase db = mHabitDbHelper.getWritableDatabase();
-
-        Resources resources = getResources();
-
-        String[] habitsArraySize = resources.getStringArray(R.array.dummy_habit_names);
-        String[] habitNames = resources.getStringArray(R.array.dummy_habit_names);
-        String[] habitStartDates = resources.getStringArray(R.array.dummy_habit_start_date);
-        int[] habitFrequency = resources.getIntArray(R.array.dummy_habit_frequency);
-        int[] habitTarget = resources.getIntArray(R.array.dummy_habit_target);
-        int[] habitPriority = resources.getIntArray(R.array.dummy_habit_priorities);
-
-        ContentValues values = new ContentValues();
-
-        for (int i = 0; i < habitsArraySize.length; i++) {
-
-            Habit habit = new Habit();
-
-            habit.setmHabitName(habitNames[i]);
-            habit.setmHabitStartDate(habitStartDates[i]);
-            habit.setmHabitFrequency(habitFrequency[i]);
-            habit.setmHabitTarget(habitTarget[i]);
-            habit.setmHabitPriority(habitPriority[i]);
-
-            values.put(HabitEntry.COLUMN_HABIT_NAME, habit.getmHabitName());
-            values.put(HabitEntry.COLUMN_HABIT_START_DATE, habit.getmHabitStartDate());
-            values.put(HabitEntry.COLUMN_HABIT_FREQUENCY, habit.getmHabitFrequency());
-            values.put(HabitEntry.COLUMN_HABIT_TARGET, habit.getmHabitTarget());
-            values.put(HabitEntry.COLUMN_HABIT_PRIORITY, habit.getmHabitPriority());
-
-            // Insert a new row for the habit table in the database, returning the ID of that new row.
-            long newRowId = db.insert(HabitContract.HabitEntry.TABLE_NAME, null, values);
-            // Show a toast message depending on whether or not the insertion was successful
-            if (newRowId == -1) {
-                // If the row ID is -1, then there was an error with insertion.
-                Toast.makeText(this, R.string.error_saving_habit, Toast.LENGTH_SHORT).show();
-            } else {
-                // LOG DATA FOR TESTING PURPOSE ONLY
-                Log.v(">>>>>> INSERTED", " ===== New Row ID:" + newRowId + " - " +
-                        String.valueOf(habit.getmHabitName()) + " - " +
-                        String.valueOf(habit.getmHabitStartDate()) + " - " +
-                        String.valueOf(habit.getmHabitFrequency()) + " - " +
-                        String.valueOf(habit.getmHabitTarget()) + " - " +
-                        String.valueOf(habit.getmHabitPriority()));
-            }
-        }
-        Log.v(">>>>>>", "===== DUMMY DATA INSERT DONE! NOW CLICK 'READ HABITS' BUTTON ======");
-        Toast.makeText(this, R.string.dummy_data_inserted, Toast.LENGTH_SHORT).show();
-
-    }// CLOSE insertDummyData
 
     /**
      * Insert contracts from the form into tha database.
@@ -149,27 +97,8 @@ public class MainActivity extends AppCompatActivity {
         String priorityString = mEditTextPriority.getText().toString().trim();
         int priority = Integer.parseInt(priorityString);
 
-        SQLiteDatabase db = mHabitDbHelper.getWritableDatabase();
+        HabitDbUtils.insert(this, name, startDate, frequency, target, priority);
 
-        ContentValues values = new ContentValues();
-        values.put(HabitEntry.COLUMN_HABIT_NAME, name);
-        values.put(HabitEntry.COLUMN_HABIT_START_DATE, startDate);
-        values.put(HabitEntry.COLUMN_HABIT_FREQUENCY, frequency);
-        values.put(HabitEntry.COLUMN_HABIT_TARGET, target);
-        values.put(HabitEntry.COLUMN_HABIT_PRIORITY, priority);
-
-        // Insert a new row for the habit table in the database, returning the ID of that new row.
-        long newRowId = db.insert(HabitContract.HabitEntry.TABLE_NAME, null, values);
-        // Show a toast message depending on whether or not the insertion was successful
-        if (newRowId == -1) {
-            // If the row ID is -1, then there was an error with insertion.
-            Toast.makeText(this, R.string.error_saving_habit, Toast.LENGTH_SHORT).show();
-            Log.v("ERROR", "Error with saving habit");
-        } else {
-            // Otherwise, the insertion was successful and we can display a toast with the row ID.
-            Toast.makeText(this, getString(R.string.orw_if_of_saved_habit) + newRowId, Toast.LENGTH_SHORT).show();
-            Log.v("HABIT SAVED", "Row id of the saved habit: " + newRowId);
-        }
     }// CLOSE INSERT
 
 
@@ -182,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor = HabitDbUtils.read(this);
 
         /* Verifies if there is at least 1 result from database. If there is no data returned */
-        if (cursor.getCount() < 1){
+        if (cursor.getCount() < 1) {
             Toast.makeText(this, R.string.no_data_in_database, Toast.LENGTH_LONG).show();
             return;
         }
@@ -222,4 +151,55 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /* Get contracts from resources and add to the contracts base as a dummy contracts */
+    private void insertDummyData() {
+
+        SQLiteDatabase db = mHabitDbHelper.getWritableDatabase();
+        Resources resources = getResources();
+
+        String[] habitsArraySize = resources.getStringArray(R.array.dummy_habit_names);
+        String[] habitNames = resources.getStringArray(R.array.dummy_habit_names);
+        String[] habitStartDates = resources.getStringArray(R.array.dummy_habit_start_date);
+        int[] habitFrequency = resources.getIntArray(R.array.dummy_habit_frequency);
+        int[] habitTarget = resources.getIntArray(R.array.dummy_habit_target);
+        int[] habitPriority = resources.getIntArray(R.array.dummy_habit_priorities);
+
+        ContentValues values = new ContentValues();
+
+        for (int i = 0; i < habitsArraySize.length; i++) {
+
+            Habit habit = new Habit();
+            habit.setmHabitName(habitNames[i]);
+            habit.setmHabitStartDate(habitStartDates[i]);
+            habit.setmHabitFrequency(habitFrequency[i]);
+            habit.setmHabitTarget(habitTarget[i]);
+            habit.setmHabitPriority(habitPriority[i]);
+
+            values.put(HabitEntry.COLUMN_HABIT_NAME, habit.getmHabitName());
+            values.put(HabitEntry.COLUMN_HABIT_START_DATE, habit.getmHabitStartDate());
+            values.put(HabitEntry.COLUMN_HABIT_FREQUENCY, habit.getmHabitFrequency());
+            values.put(HabitEntry.COLUMN_HABIT_TARGET, habit.getmHabitTarget());
+            values.put(HabitEntry.COLUMN_HABIT_PRIORITY, habit.getmHabitPriority());
+
+            // Insert a new row for the habit table in the database, returning the ID of that new row.
+            long newRowId = db.insert(HabitContract.HabitEntry.TABLE_NAME, null, values);
+            // Show a toast message depending on whether or not the insertion was successful
+            if (newRowId == -1) {
+                // If the row ID is -1, then there was an error with insertion.
+                Toast.makeText(this, R.string.error_saving_habit, Toast.LENGTH_SHORT).show();
+            } else {
+                // LOG DATA FOR TESTING PURPOSE ONLY
+                Log.v(">>>>>> INSERTED", " ===== New Row ID:" + newRowId + " - " +
+                        String.valueOf(habit.getmHabitName()) + " - " +
+                        String.valueOf(habit.getmHabitStartDate()) + " - " +
+                        String.valueOf(habit.getmHabitFrequency()) + " - " +
+                        String.valueOf(habit.getmHabitTarget()) + " - " +
+                        String.valueOf(habit.getmHabitPriority()));
+            }
+        }
+        Log.v(">>>>>>", "===== DUMMY DATA INSERT DONE! NOW CLICK 'READ HABITS' BUTTON ======");
+        Toast.makeText(this, R.string.dummy_data_inserted, Toast.LENGTH_SHORT).show();
+
+    }// CLOSE insertDummyData
 } // CLOSE MainActivity

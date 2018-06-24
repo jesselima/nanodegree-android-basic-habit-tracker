@@ -1,9 +1,13 @@
 package com.udacity.habittracker.utils;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.udacity.habittracker.R;
 import com.udacity.habittracker.contracts.HabitContract;
 import com.udacity.habittracker.helpers.HabitDbHelper;
 
@@ -19,7 +23,6 @@ public final class HabitDbUtils {
     public static Cursor read(Context context) {
 
         HabitDbHelper mHabitDbHelper = new HabitDbHelper(context);
-
         SQLiteDatabase db = mHabitDbHelper.getReadableDatabase();
 
         // Define a projection that specifies which columns from the database
@@ -45,6 +48,35 @@ public final class HabitDbUtils {
 
         return cursor;
     }
+
+
+    public static long insert(Context context, String name, String startDate, int frequency, int target, int priority) {
+
+        HabitDbHelper mHabitDbHelper = new HabitDbHelper(context);
+        SQLiteDatabase db = mHabitDbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(HabitContract.HabitEntry.COLUMN_HABIT_NAME, name);
+        values.put(HabitContract.HabitEntry.COLUMN_HABIT_START_DATE, startDate);
+        values.put(HabitContract.HabitEntry.COLUMN_HABIT_FREQUENCY, frequency);
+        values.put(HabitContract.HabitEntry.COLUMN_HABIT_TARGET, target);
+        values.put(HabitContract.HabitEntry.COLUMN_HABIT_PRIORITY, priority);
+
+        // Insert a new row for the habit table in the database, returning the ID of that new row.
+        long newRowId = db.insert(HabitContract.HabitEntry.TABLE_NAME, null, values);
+        // Show a toast message depending on whether or not the insertion was successful
+        if (newRowId == -1) {
+            // If the row ID is -1, then there was an error with insertion.
+            Toast.makeText(context, R.string.error_saving_habit, Toast.LENGTH_SHORT).show();
+            Log.v("ERROR", "Error with saving habit");
+        } else {
+            // Otherwise, the insertion was successful and we can display a toast with the row ID.
+            String idString = String.valueOf(newRowId);
+            Toast.makeText(context, R.string.orw_if_of_saved_habit + idString, Toast.LENGTH_SHORT).show();
+            Log.v("HABIT SAVED", "Row id of the saved habit: " + newRowId);
+        }
+        return newRowId;
+    }// CLOSE INSERT
 
 
 }
