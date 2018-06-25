@@ -72,11 +72,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btnDeleteDataBase = findViewById(R.id.btn_delete_data_base);
-        btnDeleteDataBase.setOnClickListener(new View.OnClickListener() {
+        Button btnDeleteHabits = findViewById(R.id.btn_delete_habits);
+        btnDeleteHabits.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteDatabase(HabitDbHelper.DATABASE_NAME);
+
+                SQLiteDatabase db = mHabitDbHelper.getWritableDatabase();
+                int numberOfDeletedRows = db.delete(HabitEntry.TABLE_NAME, null, null);
+
+                // LOG THE NUMBER OF HABITS DELETED - FOR TESTING PURPOSE ONLY
+                Log.v("DELETE HABITS", String.valueOf(numberOfDeletedRows) + " habits deleted!");
+                // TOAST THE NUMBER OF HABITS DELETED - FOR TESTING PURPOSE ONLY
+                Toast.makeText(MainActivity.this, String.valueOf(numberOfDeletedRows) + " habits deleted!", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
@@ -100,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
         HabitDbUtils.insert(this, name, startDate, frequency, target, priority);
 
     }// CLOSE INSERT
-
 
     private void readHabits() {
 
@@ -150,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.see_logcat_for_results, Toast.LENGTH_LONG).show();
         }
     }
-
 
     /* Get contracts from resources and add to the contracts base as a dummy contracts */
     private void insertDummyData() {

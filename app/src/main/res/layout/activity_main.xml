@@ -20,10 +20,10 @@
             android:text="@string/insert_dummy_data" />
 
         <Button
-            android:id="@+id/btn_delete_data_base"
+            android:id="@+id/btn_delete_habits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/delete_database" />
+            android:text="@string/delete_habits" />
     </LinearLayout>
 
     <LinearLayout

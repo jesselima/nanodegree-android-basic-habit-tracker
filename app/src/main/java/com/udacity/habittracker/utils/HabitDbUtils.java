@@ -72,12 +72,11 @@ public final class HabitDbUtils {
         } else {
             // Otherwise, the insertion was successful and we can display a toast with the row ID.
             String idString = String.valueOf(newRowId);
-            Toast.makeText(context, R.string.orw_if_of_saved_habit + idString, Toast.LENGTH_SHORT).show();
-            Log.v("HABIT SAVED", "Row id of the saved habit: " + newRowId);
+            Toast.makeText(context, "Habit _ID: " + idString, Toast.LENGTH_SHORT).show();
+            Log.v("HABIT SAVED", "Row id of the saved habit: " + idString);
         }
         return newRowId;
     }// CLOSE INSERT
-
 
 }
 

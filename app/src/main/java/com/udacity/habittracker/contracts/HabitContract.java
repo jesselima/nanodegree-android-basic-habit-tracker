@@ -12,6 +12,7 @@ public final class HabitContract {
 
         /* The name of the table. */
         public final static String TABLE_NAME = "habit";
+        public final static String _TABLE_NAME_OLD = "_habit_old";
 
         // It's the id of the habit. It's auto generated id by the contracts base.
         public final static String _ID = BaseColumns._ID;
